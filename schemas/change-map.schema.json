@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/fedoroff-vlad/agent-skills/schemas/change-map.schema.json",
+  "title": "change-map",
+  "description": "Repo-local coupling table consumed by the check-drift skill. Lists what must move together in one PR. Skill logic is generic; this table is per-repo config.",
+  "type": "object",
+  "required": ["version", "couplings"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "const": 1 },
+    "couplings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "trigger", "must_update"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Stable kebab-case identifier for the coupling."
+          },
+          "trigger": {
+            "type": "string",
+            "description": "Human description of the change that fires this coupling."
+          },
+          "ssot": {
+            "type": "string",
+            "description": "Optional source-of-truth file whose change signals this coupling fired."
+          },
+          "must_update": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Paths or globs that must move in the same PR when this coupling fires."
+          },
+          "revalidate": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Optional commands or lanes to re-run (a moved file can still be semantically stale)."
+          },
+          "notes": {
+            "type": "string",
+            "description": "Optional free-form caveats (e.g. a load-bearing pin)."
+          }
+        }
+      }
+    }
+  }
+}

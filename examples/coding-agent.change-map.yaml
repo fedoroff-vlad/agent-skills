@@ -1,0 +1,48 @@
+# coding-agent change-map — drop this at the repo root as .skills/change-map.yaml
+# Derived from coding-agent/CLAUDE.md "Change-propagation map".
+version: 1
+couplings:
+  - id: ollama-model-tag
+    trigger: Changed an Ollama model / tag
+    must_update:
+      - scripts/pull-models.sh
+      - scripts/pull-models.ps1
+      - src/code_context/config.py   # embed_model, notes_model, rollup_model
+      - scripts/golden.sh
+      - scripts/golden.ps1
+      - README.md
+      - architecture.md
+    notes: >
+      Keep the .sh and .ps1 pairs in sync. The config.py default embed_model,
+      notes_model and rollup_model must each appear in the pull list.
+
+  - id: embedding-model-dimension
+    trigger: Changed the embedding model or its dimension
+    must_update:
+      - src/code_context/config.py            # embed_dim
+      - src/code_context/migrations/0001_initial_schema.sql   # vector(N)
+      - CODE_CONTEXT_EMBED_DIM
+    notes: Swapping the embed model changes both the dim and the vector column.
+
+  - id: new-mcp-tool-or-config-env
+    trigger: Added a new MCP tool or config env var
+    must_update:
+      - architecture.md
+      - README.md
+      - the tool's stub / impl
+      - .env-style docs
+
+  - id: new-dependency
+    trigger: Added a new dependency
+    must_update:
+      - pyproject.toml
+      - uv.lock
+    revalidate:
+      - uv sync --locked
+
+  - id: skills-pointer
+    trigger: Changed the reusable-skills wiring
+    must_update:
+      - CLAUDE.md (Reusable dev-workflow skills block)
+      - .skills/change-map.yaml
+    notes: The tools/agent-skills pointer + index must exist and match across docs.
