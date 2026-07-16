@@ -75,5 +75,7 @@ category: <scaffolding | consistency | release | meta | ...>
 ---
 ```
 
-Required: `name`, `description`. Everything else is optional metadata. Do not
-add fields the loader does not read — simplicity over completeness.
+Required by the Anthropic spec (all a stock loader reads): `name`, `description`.
+`version` + `category` are **this repo's own convention metadata** (provenance +
+grouping for `SKILLS-INDEX.md`) — keep them. Beyond those, do not add frontmatter
+that *nothing* reads — simplicity over completeness.
