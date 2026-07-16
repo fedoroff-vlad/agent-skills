@@ -4,12 +4,14 @@ description: >
   Use when auditing whether a repo — or one change — conforms to AI-agent
   engineering standards: manifests (AGENTS.md, per-module agent manifests,
   Anthropic SKILL.md), SDD (spec-first), TDD / test strategy, change-propagation
-  discipline, architecture canon + security doctrine, and runtime / hardware fit.
+  discipline, architecture canon + security doctrine, runtime / hardware fit, and
+  secrets / config hygiene.
   Fires on: "архитектурный чекап", "architecture review", "проверь соответствие
   стандартам / манифестам / спецификации", "is the architecture canonical",
-  "will it run on the target hardware", "audit the repo before a milestone".
+  "will it run on the target hardware", "проверь секреты / не утекло ли что-то",
+  "are secrets safe in this repo", "audit the repo before a milestone".
   Produces a prioritized, evidence-linked findings report (🔴 blocker → 🟢 hygiene).
-version: 0.1.0
+version: 0.2.0
 category: consistency
 ---
 
@@ -21,7 +23,7 @@ verifies against a fixed rubric, and reports findings ranked by severity, each
 tied to concrete evidence (`file:line`). The detailed rubric per axis lives in
 the sibling `references/` files; this body is the procedure and the report shape.
 
-## The six axes (each has a reference rubric)
+## The seven axes (each has a reference rubric)
 
 | Axis | What it verifies | Rubric |
 |---|---|---|
@@ -31,6 +33,7 @@ the sibling `references/` files; this body is the procedure and the report shape
 | **4. Architecture canon** | Service boundaries, thin router, MCP domain-vs-capability, tools=MCP / reasoning=agent / instructions=skill / rules=data. | [references/architecture-canon.md](references/architecture-canon.md) |
 | **5. Security doctrine** | Untrusted-input-as-data, outbound confirm-gate, MCP trust boundary, OWASP LLM + MCP Top-10. | [references/architecture-canon.md](references/architecture-canon.md#security) |
 | **6. Runtime & hardware fit** | Model sizing vs RAM/GPU ceiling, embedding-model↔dim↔column consistency, resource caps, model-swap safety. | [references/runtime-fit.md](references/runtime-fit.md) |
+| **7. Secrets & config hygiene** | Secrets actually untracked (ask git, not `.gitignore`), template↔code parity, scanning/push-protection on public repos, deliberate visibility + licence. Pairs with axis 5. | [references/secrets-and-config.md](references/secrets-and-config.md) |
 
 ## Procedure
 
@@ -45,7 +48,8 @@ Checkup:
 - [ ] 4. Architecture canon  (read references/architecture-canon.md)
 - [ ] 5. Security doctrine   (same file, §Security)
 - [ ] 6. Runtime & hardware  (read references/runtime-fit.md)
-- [ ] 7. Compile report
+- [ ] 7. Secrets & config    (read references/secrets-and-config.md)
+- [ ] 8. Compile report
 ```
 
 1. **Scope.** Establish what is under audit (a whole repo vs a single change) and
