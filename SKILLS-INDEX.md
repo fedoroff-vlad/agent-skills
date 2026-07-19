@@ -13,4 +13,6 @@ doc stays flat regardless of skill count.
 | [`bump-deps`](skills/bump-deps/SKILL.md) | Raising an incoming dependency's version across SSOT + lockfile + pins. |
 | [`release-version`](skills/release-version/SKILL.md) | Cutting a stable outgoing version — semver + changelog + tag. |
 | [`run-goldens`](skills/run-goldens/SKILL.md) | Running the golden LLM tests against a real model — one, several, or all. |
+| [`new-golden`](skills/new-golden/SKILL.md) | Deciding unit-vs-golden, authoring a golden test or a fixture that can actually fail. |
+| [`add-observability`](skills/add-observability/SKILL.md) | Adding logging to a service/pipeline — event vocabulary, sink, levels, and the never-log-payloads rule. |
 | [`architecture-checkup`](skills/architecture-checkup/SKILL.md) | Auditing a repo/change against agent-engineering standards — manifests, SDD, TDD, drift, canon, runtime/hardware fit, secrets hygiene. |

@@ -44,6 +44,8 @@ lives in [`skills/new-skill/SKILL.md`](skills/new-skill/SKILL.md).
 | [`bump-deps`](skills/bump-deps/SKILL.md) | Raising an incoming dependency's version across the SSOT + lockfile + pins. |
 | [`release-version`](skills/release-version/SKILL.md) | Cutting a stable outgoing version — semver + changelog + tag. |
 | [`run-goldens`](skills/run-goldens/SKILL.md) | Running the golden LLM tests against a real model — one, several, or all. |
+| [`new-golden`](skills/new-golden/SKILL.md) | Deciding unit-vs-golden, and authoring a golden test or a fixture that can actually fail. |
+| [`add-observability`](skills/add-observability/SKILL.md) | Adding logging to a service or pipeline — event vocabulary, sink, levels, and the never-log-payloads rule. |
 | [`architecture-checkup`](skills/architecture-checkup/SKILL.md) | Auditing a repo or a change against AI-agent engineering standards (manifests / SDD / TDD / drift / canon / runtime fit / secrets hygiene) — a prioritized findings report. |
 
 The one-line index also lives in [`SKILLS-INDEX.md`](SKILLS-INDEX.md); when the
