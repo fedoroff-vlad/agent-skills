@@ -19,10 +19,12 @@
 set -euo pipefail
 
 root="$(git rev-parse --show-toplevel)"
+# Run from the repo root: git then reports root-relative paths, so the terms-file
+# comparison below is a string compare instead of a subshell per file.
+cd "$root"
 terms_file="${PRIVATE_TERMS_FILE:-$root/.private-terms}"
+terms_rel="${terms_file#"$root"/}"
 mode="${1:-staged}"
-# Absolute, so the self-exclusion below compares like with like whatever the cwd.
-terms_file_abs="$(cd "$(dirname "$terms_file")" 2>/dev/null && pwd)/$(basename "$terms_file")"
 
 if [ ! -f "$terms_file" ]; then
   # Loud, not silent: an absent denylist and a clean one look identical otherwise,
@@ -43,36 +45,53 @@ fi
 case "$mode" in
   # cached + others: tracked files AND untracked-but-not-ignored ones, which is where a
   # brand-new doc or fixture lives before it is staged.
-  --all) files=$(git ls-files --cached --others --exclude-standard) ;;
-  staged|"") files=$(git diff --cached --name-only --diff-filter=ACM) ;;
+  --all) mapfile -d '' -t files < <(git ls-files -z --cached --others --exclude-standard) ;;
+  staged|"") mapfile -d '' -t files < <(git diff --cached -z --name-only --diff-filter=ACM) ;;
   *) echo "usage: $0 [--all]" >&2; exit 2 ;;
 esac
 
-[ -n "$files" ] || exit 0
+# NUL-delimited throughout: a path may contain spaces, and a whole-tree scan is the one
+# place where a single mangled path would silently drop a file from the check.
+keep=()
+for f in "${files[@]}"; do
+  [ -n "$f" ] && [ -f "$f" ] || continue
+  # Never match the denylist against itself: it is a file full of the very terms we look
+  # for. It should be gitignored, but a repo that forgot the .gitignore line would
+  # otherwise fail on every run - noise that teaches people to ignore the check.
+  [ "$f" != "$terms_rel" ] || continue
+  keep+=("$f")
+done
+[ "${#keep[@]}" -gt 0 ] || exit 0
 
 fail=0
+
+# Escape the term into a basic regex. `grep -iF` would need no escaping, but that exact
+# combination aborts (SIGABRT) on MSYS/Git-Bash, so the term is matched as a BRE with -i.
+# Only . * [ ] ^ $ \ are metacharacters in a BRE - + ? ( ) { } | are literal - which keeps
+# this short and means a term containing / + ( ) needs no special handling.
+bre_escape() {
+  local s=$1 out='' i c
+  # A `case` pattern cannot carry a quoted backslash without the parser treating it as an
+  # escape for the following `|`, and ${s//./\.} silently drops the backslash. A containment
+  # test on a metachar string avoids both.
+  local meta='\.*[]^$'
+  for (( i=0; i<${#s}; i++ )); do
+    c=${s:i:1}
+    [[ $meta == *"$c"* ]] && out+='\'
+    out+=$c
+  done
+  printf '%s' "$out"
+}
+
 for term in "${terms[@]}"; do
-  term_lc=$(printf '%s' "$term" | tr '[:upper:]' '[:lower:]')
-  hits=""
-  while IFS= read -r f; do
-    [ -f "$f" ] || continue
-    # Never match the denylist against itself: it is a file full of the very terms we
-    # look for. It should be gitignored, but a repo that forgot the .gitignore line
-    # would otherwise fail on every run — noise that teaches people to ignore the check.
-    [ "$(cd "$(dirname "$f")" && pwd)/$(basename "$f")" != "$terms_file_abs" ] || continue
-    # Literal, case-insensitive, and deliberately not `grep -iF`: on MSYS/Git-Bash
-    # that combination aborts (SIGABRT), and escaping the term into a regex instead
-    # is its own bug farm — a term legitimately contains `/`, `.`, `+`, `(`.
-    # Lowercasing the stream and matching literally sidesteps both.
-    if tr '[:upper:]' '[:lower:]' < "$f" 2>/dev/null | grep -qF -- "$term_lc" 2>/dev/null; then
-      hits="$hits $f"
-    fi
-  done <<< "$files"
+  # One grep over the whole batch, not one per file: a two-process-per-file loop takes
+  # minutes on a 1300-file repo, and a check that slow gets bypassed.
+  hits=$(printf '%s\0' "${keep[@]}" | xargs -0 grep -Ili -e "$(bre_escape "$term")" 2>/dev/null || true)
   if [ -n "$hits" ]; then
     fail=1
-    # The term is printed only here, on the developer's own terminal — which is
+    # The term is printed only here, on the developer's own terminal - which is
     # precisely why this check does not belong in CI.
-    echo "✗ private term '$term' appears in:" >&2
+    echo "x private term '$term' appears in:" >&2
     printf '    %s\n' $hits >&2
   fi
 done
