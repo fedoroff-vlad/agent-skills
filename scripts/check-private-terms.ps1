@@ -49,23 +49,29 @@ $files = if ($All) { git ls-files --cached --others --exclude-standard } else { 
 if (-not $files) { exit 0 }
 
 $fail = $false
+# Filter once, then one Select-String per term over the whole batch. A Select-String call
+# per file takes minutes on a 1300-file repo, and a check that slow gets bypassed.
+$scan = @()
+foreach ($f in $files) {
+    if (-not (Test-Path $f -PathType Leaf)) { continue }
+    # Never match the denylist against itself: it is a file full of the very terms we look
+    # for. It should be gitignored, but a repo that forgot the .gitignore line would
+    # otherwise fail on every run - noise that teaches people to ignore the check.
+    if ((Resolve-Path $f).Path -eq (Resolve-Path $termsFile).Path) { continue }
+    $scan += $f
+}
+if (-not $scan) { exit 0 }
+
 foreach ($term in $terms) {
     # -Path, not the pipeline: piping file NAMES into Select-String searches the names
     # themselves, which silently finds nothing and reports the tree clean.
     # -SimpleMatch keeps the term literal (a term legitimately contains . / + ( );
     # Select-String is case-insensitive by default, which is what we want here.
-    $hits = @()
-    foreach ($f in $files) {
-        if (-not (Test-Path $f -PathType Leaf)) { continue }
-        # Never match the denylist against itself -- see the .sh twin for why.
-        if ((Resolve-Path $f).Path -eq (Resolve-Path $termsFile).Path) { continue }
-        if (Select-String -Path $f -SimpleMatch -Pattern $term -List -ErrorAction SilentlyContinue) {
-            $hits += $f
-        }
-    }
+    $hits = Select-String -Path $scan -SimpleMatch -Pattern $term -List -ErrorAction SilentlyContinue |
+        Select-Object -ExpandProperty Path -Unique
     if ($hits) {
         $fail = $true
-        # Printed only on the developer's own terminal -- which is why this is not a CI step.
+        # Printed only on the developer's own terminal - which is why this is not a CI step.
         Write-Host "x private term '$term' appears in:" -ForegroundColor Red
         $hits | ForEach-Object { Write-Host "    $_" }
     }

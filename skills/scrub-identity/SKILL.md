@@ -106,8 +106,12 @@ the whole tree with `--all` — against a **local, gitignored** terms file.
 
 ```sh
 scripts/check-private-terms.sh          # staged changes (use in a pre-commit hook)
-scripts/check-private-terms.sh --all    # whole working tree
+scripts/check-private-terms.sh --all    # whole working tree, incl. untracked files
 ```
+
+`--all` runs one pass per term over the whole batch (~2s on a 1300-file repo). The obvious
+per-file shape — two processes per file, or one `Select-String` call per file — takes minutes
+there, and a check that slow is a check that gets bypassed.
 
 **The terms file must never be committed.** A denylist naming what you are
 hiding, published in a public repo, *is* the leak — with a helpful index. So:
