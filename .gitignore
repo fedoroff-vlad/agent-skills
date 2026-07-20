@@ -1,2 +1,6 @@
 .DS_Store
 *.log
+
+# Local denylist for scripts/check-private-terms.* — a committed denylist
+# names exactly what it is hiding, so this file must never be tracked.
+.private-terms
