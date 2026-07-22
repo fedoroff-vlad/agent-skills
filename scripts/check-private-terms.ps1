@@ -37,7 +37,11 @@ check-private-terms: no terms file at $termsFile
     exit 2
 }
 
-$terms = Get-Content $termsFile | Where-Object { $_ -notmatch '^\s*(#|$)' }
+# -Encoding UTF8 is load-bearing: PowerShell 5.1's Get-Content defaults to the system ANSI
+# codepage, so a BOM-less UTF-8 terms file comes back as mojibake and every non-ASCII term
+# silently matches nothing. The check then reports clean on exactly the terms a non-English
+# team most needs it to catch.
+$terms = Get-Content $termsFile -Encoding UTF8 | Where-Object { $_ -notmatch '^\s*(#|$)' }
 if (-not $terms) {
     Write-Error "check-private-terms: $termsFile lists no terms -- nothing to check." -ErrorAction Continue
     exit 2
@@ -67,7 +71,10 @@ foreach ($term in $terms) {
     # themselves, which silently finds nothing and reports the tree clean.
     # -SimpleMatch keeps the term literal (a term legitimately contains . / + ( );
     # Select-String is case-insensitive by default, which is what we want here.
-    $hits = Select-String -Path $scan -SimpleMatch -Pattern $term -List -ErrorAction SilentlyContinue |
+    # -Encoding UTF8 for the same reason as the terms file: a scanned file written as BOM-less
+    # UTF-8 (which is what every editor and every agent writes) would otherwise be decoded as ANSI,
+    # and a non-ASCII term would not match its own spelling.
+    $hits = Select-String -Path $scan -SimpleMatch -Pattern $term -List -Encoding UTF8 -ErrorAction SilentlyContinue |
         Select-Object -ExpandProperty Path -Unique
     if ($hits) {
         $fail = $true
