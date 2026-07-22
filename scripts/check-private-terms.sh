@@ -86,7 +86,24 @@ bre_escape() {
 for term in "${terms[@]}"; do
   # One grep over the whole batch, not one per file: a two-process-per-file loop takes
   # minutes on a 1300-file repo, and a check that slow gets bypassed.
-  hits=$(printf '%s\0' "${keep[@]}" | xargs -0 grep -Ili -e "$(bre_escape "$term")" 2>/dev/null || true)
+  #
+  # LC_ALL=C.UTF-8 is load-bearing, not tidiness. Git-Bash inherits an empty locale, and there
+  # `grep -i` ABORTS (SIGABRT) the moment it case-folds a non-ASCII byte. The abort used to be
+  # swallowed by `2>/dev/null || true` and read as "no hits" — so a Cyrillic company name passed
+  # the check while its Latin spelling was caught. A guard that fails open on exactly the terms a
+  # non-English team needs is worse than no guard: it reports clean.
+  # `rc=$?` must not sit behind a `!`: the negation rewrites the status it was meant to read, so
+  # every failure arrives as 0. `|| rc=$?` keeps the real one and still satisfies `set -e`.
+  rc=0
+  hits=$(printf '%s\0' "${keep[@]}" |
+    LC_ALL=C.UTF-8 xargs -0 grep -Ili -e "$(bre_escape "$term")" 2>/dev/null) || rc=$?
+  # xargs: 0 = every batch matched, 123 = grep exited 1 (no match) in some batch. Both are normal.
+  # Anything else means grep itself failed, and that must never be reported as clean.
+  if [ "$rc" -ne 0 ] && [ "$rc" -ne 123 ]; then
+    echo "check-private-terms: grep failed (status $rc) matching a term — refusing to report clean." >&2
+    echo "  → this is a bug in the check, not a clean tree. Do not commit until it is fixed." >&2
+    exit 2
+  fi
   if [ -n "$hits" ]; then
     fail=1
     # The term is printed only here, on the developer's own terminal - which is
