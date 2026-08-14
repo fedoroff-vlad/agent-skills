@@ -6,7 +6,7 @@ description: >
   "scaffold a service", "new MCP module", "new agent", "new migration". Copies
   the canonical layout, wires it in, and runs check-drift so no coupled artifact
   is forgotten.
-version: 0.1.0
+version: 0.2.0
 category: scaffolding
 ---
 
@@ -23,15 +23,23 @@ project's designated canonical example and copy its shape.
 2. **Copy the layout**: replicate the directory structure, build file, and
    required boilerplate from the canonical example. Substitute the new name
    everywhere (package, artifact id, resource paths, ports).
-3. **Register it**: add the module wherever the project expects it (root build
+3. **Reuse shared code — don't clone a sibling's**: copying a sibling module is for
+   *layout*, not for its outbound clients / helpers. Before writing a client to a
+   shared capability or platform service, check the project's shared library layer
+   for an existing one and bind that. If none exists yet and a second module now
+   needs it, **lift** it into the shared layer rather than pasting a second copy —
+   the second consumer is what promotes shared code (the "second-consumer rule").
+   A capability client duplicated across modules is drift a copy-friendly scaffold
+   invites; catch it here.
+4. **Register it**: add the module wherever the project expects it (root build
    file / module list / compose file / plan index).
-4. **Reconcile**: run the `check-drift` skill immediately. A new module fires
+5. **Reconcile**: run the `check-drift` skill immediately. A new module fires
    several couplings (compose, root README layout, module README, architecture,
    index, env vars) — let check-drift enumerate them rather than trusting memory.
-5. **Contract stubs**: create the module's README with its purpose, port, env,
+6. **Contract stubs**: create the module's README with its purpose, port, env,
    endpoints/tools, and a one-line index of key classes — the README is read
    before the source, so it must exist from birth.
-6. **Test surface**: if the module has an LLM surface, add a golden test; if it
+7. **Test surface**: if the module has an LLM surface, add a golden test; if it
    introduces a cross-service wire contract, add an end-to-end test. State which
    applies.
 
