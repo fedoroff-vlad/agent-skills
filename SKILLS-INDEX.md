@@ -17,3 +17,6 @@ doc stays flat regardless of skill count.
 | [`add-observability`](skills/add-observability/SKILL.md) | Adding logging to a service/pipeline — event vocabulary, sink, levels, and the never-log-payloads rule. |
 | [`scrub-identity`](skills/scrub-identity/SKILL.md) | About to record WHOSE data a run was against — a client/employer repo name, package path or domain vocabulary — in docs, commits, tests or fixtures. |
 | [`architecture-checkup`](skills/architecture-checkup/SKILL.md) | Auditing a repo/change against agent-engineering standards — manifests, SDD, TDD, drift, canon, runtime/hardware fit, secrets hygiene. |
+| [`map-project`](skills/map-project/SKILL.md) | Starting to onboard/document an unknown repo — scan + index it into a durable project map before writing docs. |
+| [`document-project`](skills/document-project/SKILL.md) | Project is mapped — write per-module + root READMEs and per-service AGENTS.md spec skeletons. |
+| [`run-guide`](skills/run-guide/SKILL.md) | Getting an unknown project to build & run — iterate-to-green loop (toolchain/certs/.env creds/kubectl port-forwards), then write RUN.md. |
