@@ -4,6 +4,10 @@ The distilled **happy path** — only steps you actually executed and verified.
 No dead ends (those stayed in `journey-log.md`). A newcomer should get from clone
 to a running app by following this top to bottom. Redact every secret value.
 
+**Language:** RUN.md is human-facing — render prose/headings in `ONBOARDING_LANG`
+(default `ru`); keep every command, env-key name, port and path verbatim. This
+template is English as the structural reference; translate as you fill it.
+
 ```markdown
 # Running <project>
 

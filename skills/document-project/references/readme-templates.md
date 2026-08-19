@@ -4,6 +4,12 @@ Fill from `docs/onboarding/project-map.md`. Delete headings that do not apply �
 an empty section is worse than an absent one. Keep unverified build/run claims
 tagged `> ⚠️ unverified` until `run-guide` proves them.
 
+**Language:** the two README templates are **human-facing** — render their prose
+and headings in `ONBOARDING_LANG` (default `ru`); keep code, commands,
+identifiers, env-key names, ports and paths verbatim. The `AGENTS.md` spec
+skeleton is **agent-facing** — keep it English. (These templates are written in
+English as the structural reference; translate as you fill them.)
+
 ---
 
 ## Root `README.md`

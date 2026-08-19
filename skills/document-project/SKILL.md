@@ -19,6 +19,14 @@ The documentation phase. Input is `docs/onboarding/project-map.md` (from
 root gets an overview + module map, and each service gets an `AGENTS.md` spec
 skeleton so future work (human or agent) has intent-in-repo to build against.
 
+## Language: reader's language for READMEs, English for specs
+
+The READMEs are **human-facing** → write them in **`ONBOARDING_LANG`** (env var,
+default `ru`; `en`/other to override). The per-service `AGENTS.md` spec skeletons
+are **agent-facing** → always English. In every language, keep code, commands,
+identifiers, env-key names, ports and paths verbatim — translate only prose and
+headings. (Full policy in the orchestrator's `AGENTS.md`.)
+
 ## Principle: document what is TRUE, mark what is UNVERIFIED
 
 Write only what the map and the code support. A build or run step you have not

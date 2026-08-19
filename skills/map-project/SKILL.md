@@ -19,6 +19,10 @@ The first phase of onboarding. Produce ONE artifact — `docs/onboarding/project
 re-deriving the repo from scratch. It is written to **disk**, not held in
 context: a fresh session after a context reset re-reads it and continues.
 
+The map is **agent-facing** — write it in **English** always (like the
+journey-log and spec skeletons), regardless of `ONBOARDING_LANG`. Only the
+human-facing READMEs/RUN.md follow the reader's language.
+
 ## Two-step rule: machine gathers, you interpret
 
 The scanner emits **candidates with `file:line`** — it never decides meaning.

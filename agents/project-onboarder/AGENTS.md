@@ -63,11 +63,34 @@ short summary**. So the agent must never hold the plan only in its head:
 
 ```markdown
 # Onboarding progress — <project>
+human-doc language: ru   # from ONBOARDING_LANG (default ru)
 - [x] 1. map        → project-map.md (@ <sha>)
 - [~] 2. document   → root+3/12 module READMEs written
 - [ ] 3. run        → build loop: attempt 3, wall = missing DB creds (asked user)
 current: run-guide, run loop, waiting on user for DB_PASSWORD
 ```
+
+## Language policy — English for the machine, the reader's language for the human
+
+Two audiences, two languages. The split is by *who reads the artifact*, not by
+file type:
+
+- **Agent-facing artifacts → always English.** The working state and anything an
+  agent later develops against: `docs/onboarding/project-map.md`,
+  `journey-log.md`, `progress.md`, and the per-service `AGENTS.md` spec
+  skeletons. English keeps them portable and diff-stable no matter who runs the
+  onboarding or in what locale.
+- **Human-facing deliverables → the reader's language.** The onboarding docs a
+  newcomer reads — root `README.md`, per-module `README.md`, `RUN.md` — are
+  written in **`ONBOARDING_LANG`** (env var; **default `ru`**; set `en` or
+  another code to override). Only the *prose* is translated: code, commands,
+  identifiers, env-key names, ports and file paths stay verbatim in every
+  language (they are the same for everyone and a translated command is a broken
+  command).
+
+Read `ONBOARDING_LANG` once at the start of a run and record the chosen language
+in `progress.md`, so a resumed session keeps writing the human docs in the same
+language.
 
 ## Human-in-the-loop breakpoints
 
@@ -84,6 +107,7 @@ Prefer button-style questions over walls of prose when asking the user to decide
 
 ```
 0. Resume?  → read docs/onboarding/progress.md + journey-log.md if present.
+             Resolve ONBOARDING_LANG (default ru) for the human docs; record it.
 1. Map      → run map-project. Write project-map.md. Tick progress.
 2. Document → run document-project. READMEs + spec skeletons, build/run steps
               tagged ⚠️ unverified. Tick progress.

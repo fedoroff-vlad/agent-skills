@@ -19,6 +19,14 @@ The verification phase. `document-project` wrote build/run steps tagged
 distills the happy path into `RUN.md`. It is where "looks right on paper" meets
 "actually boots".
 
+## Language
+
+`RUN.md` is **human-facing** → write it in **`ONBOARDING_LANG`** (env var,
+default `ru`; `en`/other to override), translating only prose — every command,
+env-key name, port and path stays verbatim. The working state
+(`journey-log.md`, `project-map.md`) and the generated scripts are agent-facing
+→ always English. (Full policy in the orchestrator's `AGENTS.md`.)
+
 ## Loop engineering: bounded, stateful, resumable
 
 Two loops — **build**, then **run** — each the same shape:
