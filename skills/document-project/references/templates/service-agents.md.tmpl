@@ -1,0 +1,39 @@
+<!--
+  TEMPLATE: <service>/AGENTS.md spec skeleton  ·  audience: coding agent  ·  language: ENGLISH always
+  One per runnable service. The "covered by specification" half — what lets an
+  agent develop the service safely. Leave TODO(owner) where intent is unknown.
+  Source: docs/onboarding/project-map.md
+  Tokens: SERVICE RESPONSIBILITY BOUNDARY(*) INBOUND OUTBOUND INVARIANT(*)
+          CONFIG_KEYS OPEN_INTENT(*) SHA
+  Fill conventions: see templates/README.md. Delete this comment in the output.
+-->
+# {{SERVICE}} — agent manifest
+
+## Responsibility
+{{RESPONSIBILITY}}
+
+## Boundaries (MUST NOT)
+<!-- REPEAT one bullet per boundary: -->
+- {{BOUNDARY}}
+<!-- /REPEAT -->
+
+## Wire contracts
+- **Inbound:** {{INBOUND}}
+- **Outbound:** {{OUTBOUND}}
+
+## Invariants
+<!-- REPEAT one bullet per invariant: -->
+- {{INVARIANT}}
+<!-- /REPEAT -->
+
+## Config & secrets
+{{CONFIG_KEYS}}
+<!-- Secret VALUES live in .env, never here — key names only. -->
+
+## Open intent
+<!-- REPEAT one bullet per unresolved decision: -->
+- TODO(owner): {{OPEN_INTENT}}
+<!-- /REPEAT -->
+
+---
+_skeleton generated during onboarding @ {{SHA}} — fill TODO(owner) items._

@@ -1,0 +1,40 @@
+<!--
+  TEMPLATE: root AGENTS.md  ·  audience: coding agent  ·  language: ENGLISH always
+  The single reading-order doc an agent loads before touching the repo.
+  Source: docs/onboarding/project-map.md
+  Tokens: PROJECT_NAME WHAT_IS AREA(*) BUILD_CMD TEST_CMD BOUNDARIES CONVENTIONS
+          INVARIANT(*) INTENT_LOCATIONS SHA
+  Fill conventions: see templates/README.md. Delete this comment in the output.
+-->
+# {{PROJECT_NAME}} — agent guide
+
+## What this is
+{{WHAT_IS}}
+See [README](README.md) for the human overview.
+
+## Map
+| Area | Path | Owns |
+|---|---|---|
+<!-- REPEAT one row per major area/module: -->
+| {{AREA_NAME}} | {{AREA_PATH}} | {{AREA_OWNS}} |
+<!-- /REPEAT -->
+Per-service specs: `<service>/AGENTS.md`.
+
+## How to work here
+- **Build:** `{{BUILD_CMD}}`  ·  **Test:** `{{TEST_CMD}}`  ·  **Run:** see [RUN.md](RUN.md)
+- **Layering / boundaries:** {{BOUNDARIES}}
+- **Conventions:** {{CONVENTIONS}}
+
+## Never do (invariants)
+<!-- REPEAT one bullet per invariant: -->
+- {{INVARIANT}}
+<!-- /REPEAT -->
+
+## Where intent lives
+{{INTENT_LOCATIONS}}
+
+## Reading order
+1. this file → 2. README.md → 3. RUN.md → 4. the module/spec you're editing
+
+---
+_generated during onboarding @ {{SHA}}._

@@ -1,0 +1,52 @@
+<!--
+  TEMPLATE: root README.md  ·  audience: human  ·  language: ONBOARDING_LANG (default ru)
+  Source: docs/onboarding/project-map.md
+  Tokens: PROJECT_NAME ONE_LINER ARCH_PARAGRAPH MODULE_GRAPH DEPLOY_TOPOLOGY
+          MODULE_ROW(*) STACK_ROW(*) REPO_LAYOUT SHA DATE
+  Fill conventions: see templates/README.md. Delete this comment in the output.
+-->
+# {{PROJECT_NAME}}
+
+{{ONE_LINER}}
+
+## Architecture at a glance
+{{ARCH_PARAGRAPH}}
+
+```mermaid
+%% module dependency graph — internal module -> module edges, from the build files
+{{MODULE_GRAPH}}
+```
+
+<!-- OPTIONAL there are backing services: -->
+```mermaid
+%% deployment topology — app -> backing service:port, from the map's services table
+{{DEPLOY_TOPOLOGY}}
+```
+<!-- /OPTIONAL -->
+
+## Modules
+| Module | Kind | Purpose | README |
+|---|---|---|---|
+<!-- REPEAT one row per module in the map: -->
+| {{MODULE_NAME}} | {{MODULE_KIND}} | {{MODULE_PURPOSE}} | [→]({{MODULE_README_PATH}}) |
+<!-- /REPEAT -->
+
+## Tech stack & required toolchain
+| Tool | Version | Why |
+|---|---|---|
+<!-- REPEAT one row per toolchain entry: -->
+| {{TOOL}} | {{VERSION}} | {{WHY}} |
+<!-- /REPEAT -->
+
+## Getting started
+See **[RUN.md](RUN.md)** for the verified, step-by-step build & run route
+(env keys, backing services, port-forwards).
+
+For agent-driven development, start from **[AGENTS.md](AGENTS.md)** (map,
+conventions, invariants, reading order).
+
+## Repository layout
+{{REPO_LAYOUT}}
+
+---
+_generated from docs/onboarding/project-map.md @ {{SHA}} · {{DATE}}_
