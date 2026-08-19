@@ -26,6 +26,11 @@ deliberately skipped (with the owner's sign-off).
 - [ ] Backing-service access documented (compose up, or generated port-forward).
 - [ ] A health check / smoke test passed and is written down.
 
+## Git workflow
+- [ ] All work is on a branch off the default branch — nothing committed to the
+      default branch.
+- [ ] PR opened only after explicit user consent; the agent did NOT merge it.
+
 ## Durability (anti-drift + hygiene)
 - [ ] `.skills/change-map.yaml` seeded with the couplings onboarding revealed
       (env-key ↔ .env.example ↔ manifest ↔ docs; port ↔ manifest ↔ RUN.md).
