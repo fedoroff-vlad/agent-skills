@@ -106,16 +106,41 @@ Prefer button-style questions over walls of prose when asking the user to decide
 ## Operating procedure
 
 ```
-0. Resume?  → read docs/onboarding/progress.md + journey-log.md if present.
-             Resolve ONBOARDING_LANG (default ru) for the human docs; record it.
-1. Map      → run map-project. Write project-map.md. Tick progress.
-2. Document → run document-project. READMEs + spec skeletons, build/run steps
-              tagged ⚠️ unverified. Tick progress.
+0. Resume /   → read docs/onboarding/progress.md + journey-log.md if present.
+   refresh?     Their presence (or existing READMEs) = REFRESH mode: update
+                deltas, never clobber human edits. Resolve ONBOARDING_LANG
+                (default ru) for the human docs; record it in progress.md.
+1. Map      → run map-project. Write project-map.md. If its "Sensitive files"
+              section flags a real secret, STOP and warn (see Secrets below).
+              Tick progress.
+2. Document → run document-project. Tiered READMEs + root AGENTS.md + Mermaid
+              diagrams + spec skeletons; build/run steps tagged ⚠️ unverified.
+              Tick progress.
 3. Run      → run-guide build loop → run loop (creds → .env, services →
               port-forward), each iteration logged. On green: write RUN.md,
               clear ⚠️ unverified tags in the READMEs. Tick progress.
-4. Close    → verify done-criteria; list any TODO(owner) left in specs.
+4. Close    → run the done-checklist (references/done-checklist.md); seed
+              .skills/change-map.yaml from the couplings onboarding revealed;
+              final secrets sweep; list any TODO(owner) left in specs.
 ```
+
+## Close phase — quality gate + anti-drift seed
+
+Onboarding is not done when the files exist — it is done when it is **verifiably
+complete and will not silently rot**:
+
+- **Definition of done** — walk [`references/done-checklist.md`](references/done-checklist.md).
+  Every tier documented, root `AGENTS.md` present, **zero `⚠️ unverified` tags
+  left**, `RUN.md` was actually executed (not just written), no `TODO(owner)`
+  that blocks a first run.
+- **Seed the change-map** — onboarding just learned this repo's couplings (an env
+  key lives in `.env.example` + compose + the config code + the docs; a port
+  lives in the manifest + RUN.md). Write them into `.skills/change-map.yaml`
+  (schema in `agent-skills/schemas/change-map.schema.json`) so `check-drift`
+  keeps the docs honest after you leave. This is the durable payoff — the docs
+  now have an automat guarding them.
+- **Final secrets sweep** — confirm no secret value reached any committed artifact
+  or the journey log; only key names.
 
 ## Wiring this agent into a consuming repo
 

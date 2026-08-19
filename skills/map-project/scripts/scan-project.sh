@@ -101,6 +101,13 @@ eh=$(grep -rhoE '(System\.getenv\("[A-Z0-9_]+|process\.env\.[A-Z0-9_]+|os\.envir
       | grep -oE '[A-Z][A-Z0-9_]{2,}' | sort -u | head -80)
 if [ -n "$eh" ]; then printf -- '- referenced names:\n'; printf '%s\n' "$eh" | sed 's/^/    - /'; else printf -- '- referenced names: '; none; fi
 
+# ---------------------------------------------------------------- secrets
+section "Sensitive files (paths only — NEVER opened)"
+printf '_if any appear, a real secret may be committed; do NOT read them, warn the user, and for a public repo run scrub-identity_\n\n'
+secrets=$(ff "-name .env -o -name .env.local -o -name .env.*.local -o -name *.pem -o -name *.key -o -name id_rsa -o -name id_rsa.* -o -name *.p12 -o -name *.pfx -o -name *.keystore -o -name *.jks -o -name credentials.json -o -name service-account*.json -o -name .netrc -o -name .pypirc" \
+        | grep -vE '\.env\.(example|sample|template|dist)$' | sed 's:^\./::' | sort)
+if [ -n "$secrets" ]; then printf '%s\n' "$secrets" | sed 's/^/- ⚠️ `/; s/$/`/'; else none; fi
+
 # ---------------------------------------------------------------- entry points
 section "Entry points / run commands"
 found=0

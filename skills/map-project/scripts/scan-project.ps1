@@ -110,6 +110,13 @@ foreach ($f in $srcs) {
 }
 if ($names.Count) { "- referenced names:"; $names.Keys | Sort-Object | Select-Object -First 80 | ForEach-Object { "    - $_" } } else { "- referenced names: _none found_" }
 
+# ---- secrets
+Section "Sensitive files (paths only - NEVER opened)"
+"_if any appear, a real secret may be committed; do NOT read them, warn the user, and for a public repo run scrub-identity_`n"
+$sec = Get-Files @('.env','.env.local','.env.*.local','*.pem','*.key','id_rsa','id_rsa.*','*.p12','*.pfx','*.keystore','*.jks','credentials.json','service-account*.json','.netrc','.pypirc') |
+       Where-Object { $_.Name -notmatch '\.env\.(example|sample|template|dist)$' } | Sort-Object FullName
+if ($sec) { $sec | ForEach-Object { "- (!) " + (Code (Rel $_.FullName)) } } else { "_none found_" }
+
 # ---- entry points
 Section "Entry points / run commands"
 $found = $false

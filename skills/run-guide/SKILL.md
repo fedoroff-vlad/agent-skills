@@ -78,7 +78,8 @@ Rules that make the loop safe and durable:
      request) to confirm it is genuinely up, not just process-alive.
 
 3. **Distill the route.** Once green, turn the *successful* path — not the dead
-   ends — into `RUN.md` using
+   ends — into `RUN.md` (refresh in place if it exists — update the steps that
+   changed, keep human edits) using
    [`references/run-md-template.md`](references/run-md-template.md): prerequisites,
    toolchain, `.env` keys (names + which are secrets, values redacted), start
    backing services, port-forwards, build, run, verify. Every step you actually

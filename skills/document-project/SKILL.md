@@ -35,6 +35,27 @@ confirms it, then the tag comes off. Never invent an env var, a port, or a
 command that is not in the repo. This keeps the docs honest across the onboarding
 loop instead of accumulating plausible fiction.
 
+## Scale: tier the docs, don't carpet-bomb
+
+A 60-module monorepo does **not** get 60 hand-written READMEs on the first pass —
+that is noise no one reads. Tier by value:
+
+1. **Root** — always. The map + diagrams + how it fits.
+2. **Group/domain level** — one README per top-level grouping (`platform/`,
+   `domains/<x>/`, `libs/`) describing that group and listing its modules.
+3. **Leaf modules** — a full README only for the **non-trivial** ones (a service,
+   a module with a public API/contract, anything a newcomer will actually edit).
+   Trivial leaves get a one-line entry in their group README, not their own file.
+
+State the tiering you chose in `progress.md` so a resumed session continues it.
+
+## Refresh, don't clobber
+
+If a doc already exists (human-written or a previous pass), this is an **update**,
+not a rewrite: preserve human edits, change only what the map says changed, and
+never delete a section you did not generate. On a re-run, diff intent against the
+current file and touch the minimum.
+
 ## Procedure
 
 1. **Read the map.** `docs/onboarding/project-map.md` is the source. If it is
@@ -53,25 +74,43 @@ loop instead of accumulating plausible fiction.
    short "getting started" that links to `RUN.md` (owned by `run-guide`) rather
    than duplicating the run steps. Use the root template in the references file.
 
-4. **Spec skeleton** (`<service>/AGENTS.md`) — for each runnable service, a lean
+4. **Diagrams** — the root README earns one or two **Mermaid** diagrams (they
+   render on GitHub and in artifacts, no tooling): a **module dependency graph**
+   (`flowchart` of internal module → module edges, read from the build files)
+   and, when there are backing services, a **deployment topology** (app →
+   service:port, from the map's services table). A diagram of the real mechanism
+   beats three paragraphs; keep it to the edges that matter, not every arrow.
+
+5. **Root agent manifest** (`AGENTS.md` at the repo root) — the single entry
+   point for **agent-driven development** (this is the "с агентом вести
+   разработку" deliverable). Agent-facing → English. It gives a coding agent, in
+   reading order: what the project is, the module map (link the specs), the
+   conventions (build/test commands, layering rules, the never-do list), how to
+   run (link `RUN.md`), and where the per-service specs live. Use the root
+   manifest template in the references file. If the repo already wires an
+   `AGENTS.md`/`CLAUDE.md`, extend it — do not replace it.
+
+6. **Spec skeleton** (`<service>/AGENTS.md`) — for each runnable service, a lean
    manifest: responsibility, boundaries (what it must NOT do), its wire contracts
    (endpoints / events / tools), and its invariants. This is the "covered by
    specification" half — it is what lets an agent develop the module safely
    later. A skeleton with the right headings and the known facts beats a perfect
    doc that never gets written; leave `TODO(owner)` where intent is unknown.
 
-5. **Cross-link.** Root ⇄ modules ⇄ specs must link both ways. A README a reader
+7. **Cross-link.** Root ⇄ modules ⇄ specs must link both ways. A README a reader
    can get lost in is half-done.
 
-6. **Record freshness.** In each doc footer, note the source (`generated from
+8. **Record freshness.** In each doc footer, note the source (`generated from
    project-map.md @ <sha>`) so drift is later detectable by `check-drift`.
 
 ## Output layout
 
 ```
-README.md                     # root: overview + module map + toolchain
-<module>/README.md            # per module
-<service>/AGENTS.md           # per runnable service: spec skeleton
+README.md                     # root: overview + module map + Mermaid diagrams
+AGENTS.md                     # root: agent-dev entry point (English)
+<group>/README.md             # per top-level group (platform/ domains/x/ libs/)
+<module>/README.md            # per NON-TRIVIAL module (tiering — not every leaf)
+<service>/AGENTS.md           # per runnable service: spec skeleton (English)
 docs/onboarding/project-map.md# (input, from map-project — kept in sync)
 ```
 

@@ -29,6 +29,21 @@ The scanner emits **candidates with `file:line`** — it never decides meaning.
 You (the agent) open the flagged files and extract the semantics. Never copy a
 scanner hit into the map as fact without reading the source line.
 
+## Refresh, not re-scan-from-zero
+
+If `project-map.md` already exists, this is a **refresh**: re-run the scanner,
+diff against the current map, update only the rows that changed, and note removed
+/ added modules. Do not discard hand-edited notes in the map — merge over them.
+
+## Secrets safety (hard rule)
+
+The scanner's "Sensitive files" section lists **paths only** and never opens
+them. If it flags anything (a real `.env`, `*.pem`, `id_rsa`, keystore, …):
+**do not read the file**, record only its path + that it exists, and warn the
+user a secret may be committed. For a **public** repo, hand off to
+`scrub-identity` before anything is written or pushed. A secret value must never
+reach the map, the journey log, or your output.
+
 ## Procedure
 
 1. **Locate the target.** Get the project root (by name or path). Everything

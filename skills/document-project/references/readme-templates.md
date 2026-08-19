@@ -21,8 +21,22 @@ English as the structural reference; translate as you fill them.)
 
 ## Architecture at a glance
 <Shape in one paragraph: monolith / multi-module / microservices; the main
-runtime pieces and how requests/data flow. One small diagram if it earns its
-place.>
+runtime pieces and how requests/data flow.>
+
+```mermaid
+flowchart LR
+  %% module dependency graph — internal module -> module edges from the build files
+  gateway[gateway] --> orchestrator
+  orchestrator --> llm-gateway
+  orchestrator --> contracts[(contracts lib)]
+```
+
+```mermaid
+flowchart LR
+  %% deployment topology — app -> backing service:port, from the map's services table
+  app -->|5432| pg[(Postgres)]
+  app -->|11434| ollama[Ollama]
+```
 
 ## Modules
 | Module | Kind | Purpose | README |
@@ -84,6 +98,39 @@ _generated from docs/onboarding/project-map.md @ <sha>_
 ```
 
 ---
+
+## Root `AGENTS.md` (agent-dev entry point — English)
+
+The single reading-order doc a coding agent loads before touching the repo.
+Agent-facing → always English, regardless of `ONBOARDING_LANG`.
+
+```markdown
+# <project> — agent guide
+
+## What this is
+<1–3 sentences: domain + shape. Link the human README for depth.>
+
+## Map
+<The module table (or link to README's). Which module owns what.>
+Per-service specs: `<service>/AGENTS.md`.
+
+## How to work here
+- **Build:** `<cmd>`   · **Test:** `<cmd>`   · **Run:** see [RUN.md](RUN.md)
+- **Layering / boundaries:** <the rules — what may depend on what; thin router; etc.>
+- **Conventions:** <naming, error handling, logging, where config/secrets live.>
+
+## Never do (invariants)
+- <e.g. never log secret values; never commit internal hostnames; never bypass X>
+
+## Where intent lives
+<ADRs / specs / plans dirs — the source of truth for decisions.>
+
+## Reading order
+1. this file → 2. README.md → 3. RUN.md → 4. the module/spec you're editing
+
+---
+_generated during onboarding @ <sha>._
+```
 
 ## Per-service `<service>/AGENTS.md` (spec skeleton)
 
