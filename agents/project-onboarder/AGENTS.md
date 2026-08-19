@@ -103,13 +103,39 @@ Pause and ask the user — never invent or proceed on assumption — when:
 
 Prefer button-style questions over walls of prose when asking the user to decide.
 
+## Git workflow — branch → PR → the user merges
+
+Onboarding writes files into the *target* repo. Never do that on its default
+branch. The workflow is fixed:
+
+1. **Branch first.** Before the first write, if the target is a git repo, create
+   a new branch **off the default branch** (resolve it — `gh repo view
+   --json defaultBranchRef -q .defaultBranchRef.name`, or
+   `git symbolic-ref refs/remotes/origin/HEAD`). Name it for the work, e.g.
+   `onboarding/docs` or `docs/onboarding-<date>`. All phases commit here.
+2. **All work in the branch.** Every artifact — READMEs, root/service `AGENTS.md`,
+   `RUN.md`, `.skills/change-map.yaml`, and any generated script — is committed
+   on this branch, never on the default branch.
+3. **PR by consent.** When the Close phase passes, **ask the user** (button-style)
+   whether to open the PR/MR. Only on an explicit yes do you push and open it,
+   with a body that summarises what was produced and the done-checklist result.
+4. **The user merges.** Do **not** merge the PR yourself and do not enable
+   auto-merge — hand the user the link and stop. (This is deliberately unlike the
+   `close-pr` skill, which merges on green for the user's own change; here the
+   agent proposes, the human disposes.)
+
+If the target is **not** a git repo, say so and proceed without branching (the
+files are still written; there is just no PR to open).
+
 ## Operating procedure
 
 ```
-0. Resume /   → read docs/onboarding/progress.md + journey-log.md if present.
-   refresh?     Their presence (or existing READMEs) = REFRESH mode: update
-                deltas, never clobber human edits. Resolve ONBOARDING_LANG
-                (default ru) for the human docs; record it in progress.md.
+0. Branch +   → if a git repo: create a branch OFF THE DEFAULT branch; all work
+   resume/      commits here (never the default branch). Then read
+   refresh?     docs/onboarding/progress.md + journey-log.md if present — their
+                presence (or existing READMEs) = REFRESH mode: update deltas,
+                never clobber human edits. Resolve ONBOARDING_LANG (default ru)
+                for the human docs; record it in progress.md.
 1. Map      → run map-project. Write project-map.md. If its "Sensitive files"
               section flags a real secret, STOP and warn (see Secrets below).
               Tick progress.
@@ -121,7 +147,9 @@ Prefer button-style questions over walls of prose when asking the user to decide
               clear ⚠️ unverified tags in the READMEs. Tick progress.
 4. Close    → run the done-checklist (references/done-checklist.md); seed
               .skills/change-map.yaml from the couplings onboarding revealed;
-              final secrets sweep; list any TODO(owner) left in specs.
+              final secrets sweep; list any TODO(owner) left in specs. Then ASK
+              consent to open the PR; on yes, push + open it; DO NOT merge —
+              hand the user the link.
 ```
 
 ## Close phase — quality gate + anti-drift seed
@@ -141,6 +169,10 @@ complete and will not silently rot**:
   now have an automat guarding them.
 - **Final secrets sweep** — confirm no secret value reached any committed artifact
   or the journey log; only key names.
+- **Propose the PR** — with the checklist green, ask the user (button-style) to
+  open the PR from the onboarding branch. On yes: push and open it, body = what
+  was produced + the checklist result. Then STOP — the user merges (see Git
+  workflow); never merge or auto-merge yourself.
 
 ## Wiring this agent into a consuming repo
 
