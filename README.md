@@ -48,6 +48,9 @@ lives in [`skills/new-skill/SKILL.md`](skills/new-skill/SKILL.md).
 | [`add-observability`](skills/add-observability/SKILL.md) | Adding logging to a service or pipeline — event vocabulary, sink, levels, and the never-log-payloads rule. |
 | [`scrub-identity`](skills/scrub-identity/SKILL.md) | About to record WHOSE data a run was against — a client/employer repo name, package path or domain vocabulary — in docs, commits, tests or fixtures. |
 | [`architecture-checkup`](skills/architecture-checkup/SKILL.md) | Auditing a repo or a change against AI-agent engineering standards (manifests / SDD / TDD / drift / canon / runtime fit / secrets hygiene) — a prioritized findings report. |
+| [`map-project`](skills/map-project/SKILL.md) | Starting to onboard or document an unfamiliar project — scan + index it into a durable project map before writing docs. |
+| [`document-project`](skills/document-project/SKILL.md) | The project is mapped — write per-module + root READMEs and per-service AGENTS.md spec skeletons. |
+| [`run-guide`](skills/run-guide/SKILL.md) | Getting an unfamiliar project to build & run — an iterate-to-green loop (toolchain / certs / `.env` creds / kubectl port-forwards), then a verified `RUN.md`. |
 
 The one-line index also lives in [`SKILLS-INDEX.md`](SKILLS-INDEX.md); when the
 list grows past ~10, point `CLAUDE.md` at that index (one link) instead of
@@ -79,11 +82,22 @@ session reading order.
 
 ```
 skills/<name>/SKILL.md          # the skills (frontmatter + provider-neutral body)
+agents/<name>/AGENTS.md         # agent manifests that orchestrate several skills
 SKILLS-INDEX.md                 # one-line "use when" per skill (the trigger surface)
 schemas/change-map.schema.json  # schema for a repo's .skills/change-map.yaml
 examples/*.change-map.yaml      # ready-made coupling tables per repo
 scripts/init-project.{sh,ps1}   # wire this repo into a target project
 ```
+
+## Agents (orchestrations)
+
+A *skill* is one ritual; an *agent* is a manifest that sequences several skills
+into a longer job, with its own state and human breakpoints. Same portability
+rule — provider-neutral, no host-specific tools.
+
+| Agent | What it does |
+|---|---|
+| [`project-onboarder`](agents/project-onboarder/AGENTS.md) | Takes an unfamiliar project to onboarding-ready: maps it, writes per-module + root READMEs and spec skeletons, then runs an iterate-to-green loop to build & run it and writes a verified `RUN.md`. Drives `map-project` → `document-project` → `run-guide`. |
 
 ## Adding a skill
 
