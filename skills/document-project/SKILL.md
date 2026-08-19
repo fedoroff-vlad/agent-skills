@@ -61,18 +61,22 @@ current file and touch the minimum.
 1. **Read the map.** `docs/onboarding/project-map.md` is the source. If it is
    missing, run `map-project` first — do not scan ad hoc here.
 
-2. **Per-module README** (`<module>/README.md`) — one per module in the map.
-   Use the module template in
-   [`references/readme-templates.md`](references/readme-templates.md). Each
-   answers: what this module is, its public surface (API / events / CLI), how it
-   fits the whole, its own build/run/test commands, its config keys. Keep it to
-   what a newcomer needs to touch this module — link up to the root for the big
-   picture rather than repeating it.
+   All templates live in [`references/templates/`](references/templates/) — one
+   per artifact, with a fixed section order and `{{TOKEN}}` / `REPEAT` / `OPTIONAL`
+   fill markers so every onboarding comes out the same shape. The conventions are
+   in [`references/templates/README.md`](references/templates/README.md).
+
+2. **Per-module README** (`<module>/README.md`) — one per NON-TRIVIAL module (see
+   tiering). Fill [`templates/module-readme.md.tmpl`](references/templates/module-readme.md.tmpl);
+   for a tiering group use [`templates/group-readme.md.tmpl`](references/templates/group-readme.md.tmpl).
+   Each answers: what this module is, its public surface (API / events / CLI),
+   how it fits the whole, its own build/run/test commands, its config keys. Keep
+   it to what a newcomer needs to touch this module — link up to the root.
 
 3. **Root README** (`README.md`) — the entry point. Overview, the **module map**
    (a table linking each module's README), the stack + required toolchain, and a
    short "getting started" that links to `RUN.md` (owned by `run-guide`) rather
-   than duplicating the run steps. Use the root template in the references file.
+   than duplicating the run steps. Fill [`templates/root-readme.md.tmpl`](references/templates/root-readme.md.tmpl).
 
 4. **Diagrams** — the root README earns one or two **Mermaid** diagrams (they
    render on GitHub and in artifacts, no tooling): a **module dependency graph**
@@ -86,12 +90,13 @@ current file and touch the minimum.
    разработку" deliverable). Agent-facing → English. It gives a coding agent, in
    reading order: what the project is, the module map (link the specs), the
    conventions (build/test commands, layering rules, the never-do list), how to
-   run (link `RUN.md`), and where the per-service specs live. Use the root
-   manifest template in the references file. If the repo already wires an
-   `AGENTS.md`/`CLAUDE.md`, extend it — do not replace it.
+   run (link `RUN.md`), and where the per-service specs live. Fill
+   [`templates/root-agents.md.tmpl`](references/templates/root-agents.md.tmpl). If
+   the repo already wires an `AGENTS.md`/`CLAUDE.md`, extend it — do not replace it.
 
-6. **Spec skeleton** (`<service>/AGENTS.md`) — for each runnable service, a lean
-   manifest: responsibility, boundaries (what it must NOT do), its wire contracts
+6. **Spec skeleton** (`<service>/AGENTS.md`) — for each runnable service, fill
+   [`templates/service-agents.md.tmpl`](references/templates/service-agents.md.tmpl):
+   responsibility, boundaries (what it must NOT do), its wire contracts
    (endpoints / events / tools), and its invariants. This is the "covered by
    specification" half — it is what lets an agent develop the module safely
    later. A skeleton with the right headings and the known facts beats a perfect

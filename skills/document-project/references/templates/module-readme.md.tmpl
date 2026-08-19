@@ -1,0 +1,43 @@
+<!--
+  TEMPLATE: <module>/README.md  ·  audience: human  ·  language: ONBOARDING_LANG (default ru)
+  One per NON-TRIVIAL module (see tiering). Source: docs/onboarding/project-map.md
+  Tokens: MODULE_NAME RESPONSIBILITY ROLE API EVENTS ENTRYPOINT
+          CONFIG_KEY CONFIG_PURPOSE CONFIG_SECRET CONFIG_DEFAULT
+          BUILD_CMD RUN_CMD TEST_CMD DEPENDENCIES SHA
+  Fill conventions: see templates/README.md. Delete this comment in the output.
+-->
+# {{MODULE_NAME}}
+
+{{RESPONSIBILITY}}
+
+## Role in the system
+{{ROLE}}
+See the [root README](../README.md) for the big picture.
+
+## Public surface
+- **API:** {{API}}
+- **Events:** {{EVENTS}}
+- **CLI / entry point:** {{ENTRYPOINT}}
+
+<!-- OPTIONAL module has configuration: -->
+## Configuration
+| Key | Purpose | Secret? | Default |
+|---|---|---|---|
+<!-- REPEAT one row per config key: -->
+| {{CONFIG_KEY}} | {{CONFIG_PURPOSE}} | {{CONFIG_SECRET}} | {{CONFIG_DEFAULT}} |
+<!-- /REPEAT -->
+<!-- /OPTIONAL -->
+
+## Build · run · test
+```
+{{BUILD_CMD}}
+{{RUN_CMD}}
+{{TEST_CMD}}
+```
+> ⚠️ unverified until run-guide confirms.
+
+## Dependencies
+{{DEPENDENCIES}}
+
+---
+_generated from docs/onboarding/project-map.md @ {{SHA}}_

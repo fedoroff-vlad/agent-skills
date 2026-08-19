@@ -1,0 +1,23 @@
+<!--
+  TEMPLATE: <group>/README.md  ·  audience: human  ·  language: ONBOARDING_LANG (default ru)
+  For a tiering level (platform/, domains/<x>/, libs/): describes the group and
+  lists its modules — so trivial leaves need no file of their own.
+  Tokens: GROUP_NAME GROUP_PURPOSE MODULE_NAME MODULE_ONELINE MODULE_LINK SHA
+  Fill conventions: see templates/README.md. Delete this comment in the output.
+-->
+# {{GROUP_NAME}}
+
+{{GROUP_PURPOSE}}
+
+Part of **[{{PROJECT_NAME}}](../README.md)**.
+
+## Modules in this group
+| Module | What it does | README |
+|---|---|---|
+<!-- REPEAT one row per module in the group: -->
+| {{MODULE_NAME}} | {{MODULE_ONELINE}} | {{MODULE_LINK}} |
+<!-- /REPEAT -->
+<!-- MODULE_LINK is [→](<module>/README.md) for a non-trivial module, or "—" for a trivial one documented inline here. -->
+
+---
+_generated from docs/onboarding/project-map.md @ {{SHA}}_
