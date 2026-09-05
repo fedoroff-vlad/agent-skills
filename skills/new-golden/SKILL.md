@@ -96,7 +96,16 @@ accept anything around it.
    have not seen pass — an unverified golden is worse than none, because it
    looks like coverage. If no engine is available right now, say so explicitly
    and record it as pending rather than merging it green-by-assumption.
-6. **Record the cost**: goldens are slow. Note roughly how long the lane takes,
+6. **Close the loop back to the spec.** A golden usually exists to assert some
+   acceptance criterion (a `Scenario:` / WHEN-THEN / requirement written before
+   the code). Once the test exists and passes, **name it in that criterion** —
+   write the test's class into the scenario line, e.g. `THEN … (asserted by
+   MyFlowTest)`. This makes the spec→test link traceable both ways and is the
+   hook a drift-lint can check (a criterion naming a test that no longer exists
+   is a caught rename). A criterion that can never name a test was never a
+   criterion — delete it or make it testable. Skip only when the repo keeps no
+   written spec for the change.
+7. **Record the cost**: goldens are slow. Note roughly how long the lane takes,
    so the next person knows what they are opting into.
 
 ## Triggering contract
