@@ -20,3 +20,11 @@ doc stays flat regardless of skill count.
 | [`map-project`](skills/map-project/SKILL.md) | Starting to onboard/document an unknown repo — scan + index it into a durable project map before writing docs. |
 | [`document-project`](skills/document-project/SKILL.md) | Project is mapped — write per-module + root READMEs and per-service AGENTS.md spec skeletons. |
 | [`run-guide`](skills/run-guide/SKILL.md) | Getting an unknown project to build & run — iterate-to-green loop (toolchain/certs/.env creds/kubectl port-forwards), then write RUN.md. |
+| [`dev-driver`](skills/dev-driver/SKILL.md) | Driving a whole dev task end-to-end — diagnose → spec → implement (TDD) → verify → close, orchestrating the other skills with durable on-disk state. |
+| [`plan-change`](skills/plan-change/SKILL.md) | Before coding — turn a task/bug/idea into a small SDD change-spec (intent, given/when/then criteria, artifacts, tests, open questions). Planning only. |
+| [`implement-change`](skills/implement-change/SKILL.md) | Writing code against an approved change-spec — the TDD core: failing test (red) → smallest change (green) → refactor, per criterion. |
+| [`diagnose`](skills/diagnose/SKILL.md) | Something fails and you need the real cause first — reproduce → read the real failure → quote the decisive line → one hypothesis → smallest probe. |
+| [`decompose`](skills/decompose/SKILL.md) | A task with no ready-made workflow skill — map it onto capability skills and propose an ordered plan with confirmation points before changing anything. |
+| [`onboard-repo`](skills/onboard-repo/SKILL.md) | Creating or enriching a repo-root AGENTS.md — module map + build commands (grounded in the build file), domain glossary, gotchas. Kept local (git-ignored). |
+| [`api-call`](skills/api-call/SKILL.md) | Sending a raw REST or gRPC request (Postman-style) — read a JSON API, or POST/PUT a prepared body to an endpoint. gRPC via grpcurl, REST via curl. |
+| [`read-excel`](skills/read-excel/SKILL.md) | Reading an Excel file (`.xlsx`/`.xls`) into structured data (TSV/JSON) for downstream processing. Utility skill for workflow runners. |

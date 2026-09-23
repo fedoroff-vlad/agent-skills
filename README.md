@@ -50,7 +50,15 @@ lives in [`skills/new-skill/SKILL.md`](skills/new-skill/SKILL.md).
 | [`architecture-checkup`](skills/architecture-checkup/SKILL.md) | Auditing a repo or a change against AI-agent engineering standards (manifests / SDD / TDD / drift / canon / runtime fit / secrets hygiene) — a prioritized findings report. |
 | [`map-project`](skills/map-project/SKILL.md) | Starting to onboard or document an unfamiliar project — scan + index it into a durable project map before writing docs. |
 | [`document-project`](skills/document-project/SKILL.md) | The project is mapped — write per-module + root READMEs and per-service AGENTS.md spec skeletons. |
-| [`run-guide`](skills/run-guide/SKILL.md) | Getting an unfamiliar project to build & run — an iterate-to-green loop (toolchain / certs / `.env` creds / kubectl port-forwards), then a verified `RUN.md`. |
+| [`run-guide`](skills/run-guide/SKILL.md) | Getting an unfamiliar project to build & run — an iterate-to-green (toolchain / certs / `.env` creds / kubectl port-forwards), then a verified `RUN.md`. |
+| [`dev-driver`](skills/dev-driver/SKILL.md) | Driving a whole dev task end-to-end — diagnose → spec → implement (TDD) → verify → close, orchestrating the other skills with durable on-disk state. |
+| [`plan-change`](skills/plan-change/SKILL.md) | Before coding — turn a task/bug/idea into a small SDD change-spec (intent, given/when/then criteria, artifacts, tests, open questions). Planning only. |
+| [`implement-change`](skills/implement-change/SKILL.md) | Writing code against an approved change-spec — the TDD core: failing test (red) → smallest change (green) → refactor, per criterion. |
+| [`diagnose`](skills/diagnose/SKILL.md) | Something fails and you need the real cause first — reproduce → read the real failure → quote the decisive line → one hypothesis → smallest probe. |
+| [`decompose`](skills/decompose/SKILL.md) | A task with no ready-made workflow skill — map it onto capability skills and propose an ordered plan with confirmation points before changing anything. |
+| [`onboard-repo`](skills/onboard-repo/SKILL.md) | Creating or enriching a repo-root `AGENTS.md` — module map + build commands (grounded in the build file), domain glossary, gotchas. Kept local (git-ignored). |
+| [`api-call`](skills/api-call/SKILL.md) | Sending a raw REST or gRPC request (Postman-style) — read a JSON API, or POST/PUT a prepared body to an endpoint. gRPC via grpcurl, REST via curl. |
+| [`read-excel`](skills/read-excel/SKILL.md) | Reading an Excel file (`.xlsx`/`.xls`) into structured data (TSV/JSON) for downstream processing. Utility skill for workflow runners. |
 
 The one-line index also lives in [`SKILLS-INDEX.md`](SKILLS-INDEX.md); when the
 list grows past ~10, point `CLAUDE.md` at that index (one link) instead of
