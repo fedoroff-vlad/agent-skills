@@ -51,6 +51,7 @@ lives in [`skills/new-skill/SKILL.md`](skills/new-skill/SKILL.md).
 | [`map-project`](skills/map-project/SKILL.md) | Starting to onboard or document an unfamiliar project — scan + index it into a durable project map before writing docs. |
 | [`document-project`](skills/document-project/SKILL.md) | The project is mapped — write per-module + root READMEs and per-service AGENTS.md spec skeletons. |
 | [`run-guide`](skills/run-guide/SKILL.md) | Getting an unfamiliar project to build & run — an iterate-to-green loop (toolchain / certs / `.env` creds / kubectl port-forwards), then a verified `RUN.md`. |
+| [`tech-resume-builder`](skills/tech-resume-builder/SKILL.md) | Building or revising a tech (Java/backend/IT) resume as a single-page HTML/PDF — colortype-matched palette, print-fit CSS, and HR-style ATS/positioning rules. |
 
 The one-line index also lives in [`SKILLS-INDEX.md`](SKILLS-INDEX.md); when the
 list grows past ~10, point `CLAUDE.md` at that index (one link) instead of

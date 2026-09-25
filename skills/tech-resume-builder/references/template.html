@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{{FULL_NAME}} — {{ROLE_TITLE}}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  /* ============================================================
+     PALETTE — swap this whole block for one from
+     references/colortype-palettes.md. Never hardcode a color
+     anywhere below this block; use the variables.
+     ============================================================ */
+  :root {
+    --bg: #f0ece4;
+    --paper: #faf7f2;
+    --ink: #1e1a14;
+    --accent: #7b3f1e;
+    --accent2: #b8621a;
+    --accent3: #c9922a;
+    --muted: #7a6e5f;
+    --border: #d8cfc0;
+    --tag-bg: #ede5d8;
+    --tag-text: #5c3010;
+    --header-bg: #2a1a0e;
+    --header-text: #f5efe6;
+    --card-bg: #efe7d6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 30px 20px;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+    overflow: hidden;
+  }
+
+  /* ---- Header: photo | name/title/summary | stat blocks ---- */
+  .header {
+    background: var(--header-bg);
+    display: grid;
+    grid-template-columns: 104px 1fr 130px;
+    /* No photo? Use: grid-template-columns: 1fr 130px; and remove .header-photo */
+  }
+  .header-photo { padding: 22px 0 22px 22px; }
+  .header-photo img {
+    width: 74px; height: 74px;
+    border-radius: 50%; object-fit: cover;
+    object-position: center;
+    border: 2px solid var(--accent2);
+    display: block;
+  }
+  .header-info { padding: 20px 16px 18px 12px; }
+  .badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--accent3); border: 1px solid var(--accent3);
+    padding: 2px 7px; border-radius: 2px; margin-bottom: 6px;
+  }
+  .name {
+    font-size: 25px; font-weight: 700;
+    color: var(--header-text);
+    letter-spacing: -0.02em; margin-bottom: 5px;
+  }
+  .title { font-size: 10.5px; color: rgba(245,239,230,0.55); margin-bottom: 8px; }
+  .summary { font-size: 10.5px; line-height: 1.6; color: rgba(245,239,230,0.82); }
+
+  .header-stats {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 18px 18px 18px 8px;
+    border-left: 1px solid rgba(255,255,255,0.07);
+  }
+  .stat { padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); text-align: right; }
+  .stat:last-child { border-bottom: none; }
+  .stat-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 17px; font-weight: 600;
+    color: var(--accent3); line-height: 1; margin-bottom: 1px;
+  }
+  .stat-label { font-size: 8.5px; color: rgba(245,239,230,0.4); letter-spacing: 0.02em; }
+
+  /* ---- Contacts row ---- */
+  .contacts-row {
+    display: flex; gap: 13px;
+    padding: 7px 22px;
+    background: var(--accent); flex-wrap: wrap;
+  }
+  .contact-item { display: flex; align-items: center; gap: 4px; color: rgba(245,239,230,0.9); font-size: 10px; }
+  .contact-item svg { flex-shrink: 0; opacity: 0.75; }
+  .contact-item a { color: rgba(245,239,230,0.9); text-decoration: none; }
+
+  /* ---- Body: main + sidebar (screen = grid, print = table, see @media print) ---- */
+  .body { display: grid; grid-template-columns: 1fr 200px; }
+  .main { padding: 16px 20px 16px 24px; border-right: 1px solid var(--border); }
+  .sidebar { padding: 16px 16px; background: #f4efe6; }
+
+  .section { margin-bottom: 12px; }
+  .section:last-child { margin-bottom: 0; }
+  .section-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent);
+    padding-bottom: 4px;
+    border-bottom: 1.5px solid var(--accent);
+    margin-bottom: 10px;
+  }
+
+  /* ---- Key Competencies grid ---- */
+  .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .comp-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 2.5px solid var(--accent2);
+    padding: 6px 8px; border-radius: 2px;
+  }
+  .comp-title { font-size: 10px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .comp-desc { font-size: 9.5px; color: var(--muted); line-height: 1.45; }
+
+  /* ---- Experience / jobs ---- */
+  .job { margin-bottom: 9px; padding-bottom: 9px; border-bottom: 1px solid var(--border); break-inside: avoid; page-break-inside: avoid; }
+  .job:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .job-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1px; gap: 8px; }
+  .job-title { font-size: 12px; font-weight: 700; color: var(--ink); }
+  .job-period { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+  .job-meta { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+  .job-company { font-size: 10.5px; font-weight: 500; color: var(--accent2); }
+  .team-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.5px; font-weight: 600;
+    color: var(--accent); background: var(--tag-bg);
+    border: 1px solid var(--border); padding: 1px 5px; border-radius: 2px;
+  }
+
+  .achievements { list-style: none; }
+  .achievements li {
+    font-size: 10.5px; line-height: 1.55; color: #2e2618;
+    padding-left: 11px; position: relative; margin-bottom: 3px;
+  }
+  .achievements li::before {
+    content: '▸'; position: absolute; left: 0;
+    color: var(--accent3); font-size: 8.5px; top: 2px;
+  }
+  .achievements li strong { color: var(--ink); font-weight: 600; }
+
+  .stack-line {
+    margin-top: 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.5px; color: var(--muted); line-height: 1.6;
+    border-left: 2px solid var(--border); padding-left: 6px;
+  }
+
+  /* ---- Sidebar: skill groups, education, languages ---- */
+  .skill-group { margin-bottom: 9px; }
+  .skill-group-title {
+    font-size: 8.5px; font-weight: 700;
+    color: var(--ink); text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 4px;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 3px; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; padding: 2px 5px;
+    border-radius: 2px; font-weight: 500;
+  }
+  .tag.core { background: var(--accent); color: #faf7f2; }
+
+  .divider { height: 1px; background: var(--border); margin: 6px 0; }
+
+  .edu-item { margin-bottom: 4px; }
+  .edu-year { font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: var(--accent3); }
+  .edu-degree { font-size: 10px; font-weight: 600; color: var(--ink); }
+  .edu-school { font-size: 9.5px; color: var(--muted); }
+
+  .lang-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .lang-name { font-size: 10px; font-weight: 600; color: var(--ink); }
+  .lang-level { font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: var(--muted); }
+
+  /* ============================================================
+     PRINT — see references/print-fitting.md before touching this.
+     display:table is the reliable Chrome print-pagination fix;
+     the escalation ladder (margin → font-size → spacing → content)
+     lives in that file.
+     ============================================================ */
+  @page {
+    size: A4;
+    margin: 8mm;
+  }
+
+  @media print {
+    body { padding: 0; background: white; font-size: 94%; }
+    .page { box-shadow: none; border: none; max-width: 100%; }
+
+    .body {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+    .main {
+      display: table-cell;
+      width: 68%;
+      padding: 10px 16px 10px 20px;
+      border-right: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .sidebar {
+      display: table-cell;
+      width: 32%;
+      padding: 10px 14px;
+      background: #f4efe6;
+      vertical-align: top;
+    }
+
+    .job { break-inside: avoid !important; page-break-inside: avoid !important; }
+    .comp-grid { break-inside: avoid; page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-photo">
+      <!-- {{PHOTO_BASE64}} — see phase 3 in SKILL.md for crop process. Omit
+           this whole .header-photo div (and switch grid-template-columns
+           to "1fr 130px") if no photo is used. -->
+      <img src="data:image/jpeg;base64,{{PHOTO_BASE64}}" alt="Фото">
+    </div>
+    <div class="header-info">
+      <div class="badge">{{ROLE_BADGE}}</div>
+      <!-- e.g. "Team Lead · Java · AI" or "Java Backend Engineer · AI" -->
+      <div class="name">{{FULL_NAME}}</div>
+      <div class="title">{{ROLE_LINE}}</div>
+      <!-- e.g. "Engineering Lead · Java Microservices · AI-Driven Engineering · Enterprise Integrations" -->
+      <div class="summary">{{SUMMARY}}</div>
+      <!-- 2-3 sentence summary. Architecture-first for senior/lead resumes.
+           See references/content-rules.md for IC-vs-management framing rules. -->
+    </div>
+    <div class="header-stats">
+      <div class="stat">
+        <div class="stat-value">{{STAT_1_VALUE}}</div>
+        <div class="stat-label">{{STAT_1_LABEL}}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{STAT_2_VALUE}}</div>
+        <div class="stat-label">{{STAT_2_LABEL}}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{STAT_3_VALUE}}</div>
+        <div class="stat-label">{{STAT_3_LABEL}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contacts-row">
+    <div class="contact-item">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.35 6.35l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"></path></svg>
+      {{PHONE}}
+    </div>
+    <div class="contact-item">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      {{EMAIL}}
+    </div>
+    <div class="contact-item">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      {{LOCATION}}
+    </div>
+    <div class="contact-item">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M21.198 2.433a2.242 2.242 0 00-1.022.215l-17.5 8.75a2.25 2.25 0 00.064 4.047l4.56 1.677 2.196 6.816a1 1 0 001.87.103l2.403-4.806 4.791 1.76a2.25 2.25 0 002.976-1.998l1.25-14.5a2.25 2.25 0 00-2.588-2.064z"/></svg>
+      <a href="{{TELEGRAM_URL}}">{{TELEGRAM_HANDLE}}</a>
+    </div>
+    <div class="contact-item">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.11-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.69 1.25 3.34.96.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 015.73 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .3.21.66.79.55A10.51 10.51 0 0023.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>
+      <a href="{{GITHUB_URL}}">{{GITHUB_HANDLE}}</a>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="main">
+
+      <!-- Key Competencies: 3-6 cards, architecture-first order.
+           See references/content-rules.md. Omit the whole section if
+           there's nothing genuinely distinct to say. -->
+      <div class="section">
+        <div class="section-title">Ключевые компетенции</div>
+        <div class="comp-grid">
+          <div class="comp-card">
+            <div class="comp-title">{{COMP_1_ICON}} {{COMP_1_TITLE}}</div>
+            <div class="comp-desc">{{COMP_1_DESC}}</div>
+          </div>
+          <div class="comp-card">
+            <div class="comp-title">{{COMP_2_ICON}} {{COMP_2_TITLE}}</div>
+            <div class="comp-desc">{{COMP_2_DESC}}</div>
+          </div>
+          <div class="comp-card">
+            <div class="comp-title">{{COMP_3_ICON}} {{COMP_3_TITLE}}</div>
+            <div class="comp-desc">{{COMP_3_DESC}}</div>
+          </div>
+          <div class="comp-card">
+            <div class="comp-title">{{COMP_4_ICON}} {{COMP_4_TITLE}}</div>
+            <div class="comp-desc">{{COMP_4_DESC}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Опыт работы</div>
+
+        <!-- One .job block per role, NEWEST FIRST. Copy this block for
+             each job. Bullets: architecture-first, action-verb-led,
+             honest about scope (see content-rules.md). -->
+        <div class="job">
+          <div class="job-header">
+            <div class="job-title">{{JOB_1_TITLE}}</div>
+            <div class="job-period">{{JOB_1_PERIOD}}</div>
+          </div>
+          <div class="job-meta">
+            <div class="job-company">{{JOB_1_COMPANY}}</div>
+            <div class="team-badge">👥 {{JOB_1_TEAM_SIZE}}</div>
+            <!-- omit .team-badge entirely for IC-framed resumes -->
+          </div>
+          <ul class="achievements">
+            <li>{{JOB_1_BULLET_1}}</li>
+            <li>{{JOB_1_BULLET_2}}</li>
+            <li>{{JOB_1_BULLET_3}}</li>
+            <li>{{JOB_1_BULLET_4}}</li>
+          </ul>
+          <div class="stack-line">{{JOB_1_STACK}}</div>
+        </div>
+
+        <div class="job">
+          <div class="job-header">
+            <div class="job-title">{{JOB_2_TITLE}}</div>
+            <div class="job-period">{{JOB_2_PERIOD}}</div>
+          </div>
+          <div class="job-meta">
+            <div class="job-company">{{JOB_2_COMPANY}}</div>
+          </div>
+          <ul class="achievements">
+            <li>{{JOB_2_BULLET_1}}</li>
+            <li>{{JOB_2_BULLET_2}}</li>
+            <li>{{JOB_2_BULLET_3}}</li>
+          </ul>
+          <div class="stack-line">{{JOB_2_STACK}}</div>
+        </div>
+
+        <!-- add more .job blocks as needed -->
+
+      </div>
+    </div>
+
+    <div class="sidebar">
+
+      <div class="section">
+        <div class="section-title">Tech Stack</div>
+        <div class="skill-group">
+          <div class="skill-group-title">Core</div>
+          <div class="tags">
+            <span class="tag core">{{CORE_TAG_1}}</span>
+            <span class="tag core">{{CORE_TAG_2}}</span>
+            <span class="tag core">{{CORE_TAG_3}}</span>
+            <span class="tag core">{{CORE_TAG_4}}</span>
+          </div>
+        </div>
+        <!-- copy .skill-group per category: AI Engineering, Messaging,
+             BPM, БД/ORM, DevOps, Observability, Leadership, etc.
+             Only include groups with real content — don't pad. -->
+        <div class="skill-group">
+          <div class="skill-group-title">{{GROUP_2_NAME}}</div>
+          <div class="tags">
+            <span class="tag">{{GROUP_2_TAG_1}}</span>
+            <span class="tag">{{GROUP_2_TAG_2}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-title">Образование</div>
+        <div class="edu-item">
+          <div class="edu-year">{{EDU_1_YEAR}}</div>
+          <div class="edu-degree">{{EDU_1_DEGREE}}</div>
+          <div class="edu-school">{{EDU_1_SCHOOL}}</div>
+        </div>
+        <!-- copy .edu-item per entry -->
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-title">Языки</div>
+        <div class="lang-item">
+          <span class="lang-name">{{LANG_1_NAME}}</span>
+          <span class="lang-level">{{LANG_1_LEVEL}}</span>
+        </div>
+        <div class="lang-item">
+          <span class="lang-name">{{LANG_2_NAME}}</span>
+          <span class="lang-level">{{LANG_2_LEVEL}}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body></html>

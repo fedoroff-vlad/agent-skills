@@ -20,3 +20,4 @@ doc stays flat regardless of skill count.
 | [`map-project`](skills/map-project/SKILL.md) | Starting to onboard/document an unknown repo — scan + index it into a durable project map before writing docs. |
 | [`document-project`](skills/document-project/SKILL.md) | Project is mapped — write per-module + root READMEs and per-service AGENTS.md spec skeletons. |
 | [`run-guide`](skills/run-guide/SKILL.md) | Getting an unknown project to build & run — iterate-to-green loop (toolchain/certs/.env creds/kubectl port-forwards), then write RUN.md. |
+| [`tech-resume-builder`](skills/tech-resume-builder/SKILL.md) | Building or revising a tech resume as a single-page HTML/PDF — colortype palette, print-fit CSS, ATS/HR positioning rules. |
