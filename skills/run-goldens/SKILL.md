@@ -66,6 +66,31 @@ sitting between two domains can route one way now and another next run. So:
 - When you *add* a golden case, run it **twice** to confirm it is stable before
   committing — a flaky green is a debt that fails someone else later.
 
+## Stop the stack before a full build
+
+The runner deliberately leaves the engine + gateway **up** so the next run is instant — which means a
+**running gateway jar** is still holding its own build output. On Windows the next full `verify`/`package`
+then dies in `spring-boot:repackage` with *"Unable to rename target/<gateway>.jar to
+<gateway>.jar.original"*, and the message says nothing about goldens, so it reads as a broken build.
+
+So: **after the golden run, before the pre-PR full build, stop the stack** (`scripts/golden.sh down` in
+this repo family — it stops the gateway it started, and the inference daemon only if it started that
+too). Same trap for any long-lived process started off a build artifact, not just this lane.
+
+## What a failure usually means (real experience)
+
+A stable failure is **most often the prompt/SKILL, not the model** — and the SKILL's own *examples* are
+the first place to look:
+
+- **Few-shot index leakage.** A pick-one-of-a-list skill whose examples show `{"pick": 2}` for a sentence
+  teaches the model to answer `2` for that sentence, whatever the list holds. Give every example its own
+  candidate list and state that the index comes from *this* message's list.
+- **The fixture repeats the example.** If the test's input and candidates are the example's own literals,
+  the model can pass by copying — the test proves nothing. Keep the fixture's wording off the examples.
+- **A value the code drops.** When production normalises an enum (dropping anything unknown), the model
+  answering in the user's language means the action silently does nothing. Make the skill state the exact
+  allowed values, and let the golden assert the normalised one.
+
 ## When NOT to reach for this
 
 - You changed only non-LLM code (plumbing, DB, config with no prompt/router
